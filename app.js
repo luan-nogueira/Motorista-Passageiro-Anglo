@@ -1379,14 +1379,11 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-modalEditBtn.addEventListener("click", async () => {
+modalEditBtn.addEventListener("click", () => {
   if (!openedDocId) return;
 
   const dados = currentDocsCache.find((item) => item.__docId === openedDocId);
   if (!dados) return;
-
-  const autorizado = await solicitarSenhaGestor();
-  if (!autorizado) return;
 
   preencherFormulario(dados);
   editingDocId = openedDocId;
@@ -1401,9 +1398,6 @@ modalDeleteBtn.addEventListener("click", async () => {
 
   const dados = currentDocsCache.find((item) => item.__docId === openedDocId);
   const nome = dados?.responsavel || "este registro";
-
-  const autorizado = await solicitarSenhaGestor();
-  if (!autorizado) return;
 
   const confirmar = confirm(`Deseja realmente excluir o checklist de ${nome} em ${formatarDataHoraBR(dados?.dataRegistro)}?`);
   if (!confirmar) return;
@@ -1465,12 +1459,15 @@ btnLimparFiltros.addEventListener("click", () => {
 
 btnExportarExcel.addEventListener("click", exportarExcel);
 
-lista.addEventListener("click", (e) => {
+lista.addEventListener("click", async (e) => {
   const card = e.target.closest("[data-open-id]");
   if (!card) return;
 
   const docId = card.getAttribute("data-open-id");
   if (!docId) return;
+
+  const autorizado = await solicitarSenhaGestor();
+  if (!autorizado) return;
 
   abrirModal(docId);
 });
