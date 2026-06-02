@@ -1300,7 +1300,6 @@ function fecharPasswordModal() {
     passwordModal.classList.add("hidden");
     document.body.style.overflow = "";
   }
-  resolvePasswordPromise = null;
 }
 
 function tratarConfirmarSenha() {
@@ -1310,7 +1309,9 @@ function tratarConfirmarSenha() {
 
   if (senha === SENHA_GESTOR) {
     fecharPasswordModal();
-    if (resolvePasswordPromise) resolvePasswordPromise(true);
+    const resolve = resolvePasswordPromise;
+    resolvePasswordPromise = null;
+    if (resolve) resolve(true);
   } else {
     passwordErrorMsg.classList.remove("hidden");
     gestorPasswordInput.value = "";
@@ -1320,7 +1321,9 @@ function tratarConfirmarSenha() {
 
 function tratarCancelarSenha() {
   fecharPasswordModal();
-  if (resolvePasswordPromise) resolvePasswordPromise(false);
+  const resolve = resolvePasswordPromise;
+  resolvePasswordPromise = null;
+  if (resolve) resolve(false);
 }
 
 // =========================
