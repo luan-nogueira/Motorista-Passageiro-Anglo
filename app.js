@@ -484,8 +484,9 @@ function validarDados(dados) {
 
   if (semResposta) return "Responda TODOS os itens obrigatórios do checklist.";
 
-  if (dados.itens?.descansado?.resposta === "Menos de 4 horas" && !dados.itens?.descansado?.observacoes?.trim()) {
-    return "Por favor, preencha a justificativa por ter dormido menos de 4 horas.";
+  const respostaDescansado = dados.itens?.descansado?.resposta;
+  if ((respostaDescansado === "Menos de 4 horas" || respostaDescansado === "4 a 6 horas") && !dados.itens?.descansado?.observacoes?.trim()) {
+    return "Por favor, preencha a justificativa por ter dormido pouco (Menos de 4 horas ou 4 a 6 horas).";
   }
 
   if (!dados.fadiga?.recente || !dados.fadiga?.energia) {
@@ -583,15 +584,12 @@ function atualizarVisualAlertaItem(chave) {
     const containerObs = document.getElementById("container_obs_descansado");
     const obsTextarea = document.getElementById("descansado_obs");
     if (containerObs) {
-      if (resposta === "Menos de 4 horas") {
+      if (resposta === "Menos de 4 horas" || resposta === "4 a 6 horas") {
         containerObs.classList.remove("hidden");
-        if (obsTextarea) {
-          obsTextarea.required = true;
-        }
       } else {
         containerObs.classList.add("hidden");
         if (obsTextarea) {
-          obsTextarea.required = false;
+          obsTextarea.value = "";
         }
       }
     }
